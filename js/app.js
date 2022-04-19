@@ -1,7 +1,7 @@
 'use strict';
 
 // global variables
-let votingRounds = 10;
+let votingRounds = 25;
 let allProductsArray = [];
 
 let productContainer = document.getElementById('container');
