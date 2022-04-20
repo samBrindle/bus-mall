@@ -70,7 +70,26 @@ function allUniqueProducts() {
     }
 }
 
+
+// **** ARRAY TO STORE UNIQUE NUMBERS ***
+// let indexArray = [];
 function renderImg() {
+
+  // ****** Using while loop to validate numbers and then using the array like a queue for the 2 rounds:
+
+  // while(indexArray.length < 6){
+  //   let randomNumber = getRandomNumber();
+  //   if(!indexArray.includes(randomNumber)){
+  //     indexArray.push(randomNumber);
+  //   }
+  // }
+
+  // product1 = indexArray.shift();
+  // product2 = indexArray.shift();
+  // product3 = indexArray.shift();
+  
+  // ***********************************
+
 
     product1 = getRandomNumber();
     product2 = getRandomNumber();
