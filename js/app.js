@@ -103,12 +103,8 @@ renderImg();
 function handleClick(event) {
     let imgClicked = event.target.alt;
 
-    //alt is undefined
-    console.log('THIS WAS CLICKED >>>', imgClicked);
-
     for(let i = 0; i < allProductsArray.length; i++) {
         if(imgClicked === allProductsArray[i].productName) {
-            console.log('hello');
             allProductsArray[i].clicks++;
         }
     }
@@ -135,7 +131,6 @@ function renderProductChart() {
         productViews.push(allProductsArray[i].views);
     }
 
-    console.log(productVotes)
 
     let myChartObj = {
         type: 'bar',
@@ -145,10 +140,10 @@ function renderProductChart() {
             label: '# of Votes', // # votes and # views
             data: productVotes,
             backgroundColor: [
-              'blue'
+              'white'
             ],
             borderColor: [
-              'blue'
+              'white'
             ],
             borderWidth: 1
           },
