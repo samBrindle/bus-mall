@@ -12,6 +12,12 @@ let image3 = document.getElementById('image-three');
 let resultsList = document.getElementById('display-results');
 let resultButton = document.getElementById('show-results-btn');
 
+let product1 = null;
+let product2 = null;
+let product3 = null;
+
+let ctx = document.getElementById('myChart');
+
 // constructor
 
 function Product(name, src) {
@@ -49,11 +55,7 @@ function getRandomNumber() {
     return Math.floor(Math.random() * allProductsArray.length);
 }
 
-function renderImg() {
-    let product1 = getRandomNumber();
-    let product2 = getRandomNumber();
-    let product3 = getRandomNumber();
-
+function allUniqueProducts() {
     while( product1 === product2 || product1 === product3 || product3 === product2 ) {
         if(product1 == product2) {
             product2 = getRandomNumber();
@@ -63,50 +65,111 @@ function renderImg() {
             product3 = getRandomNumber();
         }
     }
+}
+
+function renderImg() {
+
+    product1 = getRandomNumber();
+    product2 = getRandomNumber();
+    product3 = getRandomNumber();
+
+    allUniqueProducts();
+
+    // not giving alt any value
     image1.src = allProductsArray[product1].src;
-    image2.src = allProductsArray[product2].src;
-    image3.src = allProductsArray[product3].src;
-
     image1.alt = allProductsArray[product1].name;
-    image2.alt = allProductsArray[product2].name;
-    image3.alt = allProductsArray[product3].name;
-
     allProductsArray[product1].views++;
+    
+    image2.src = allProductsArray[product2].src;
+    image2.alt = allProductsArray[product2].name;
     allProductsArray[product2].views++;
+    
+    image3.src = allProductsArray[product3].src;
+    image3.alt = allProductsArray[product3].name;
     allProductsArray[product3].views++;
 }
 
 renderImg();
 
+
 // event handlers
 
-function handleProductClick(event) {
-    let imgClicked = event.target.alt;
+function handleClick(event) {
+    let imgClicked = event.currentTarget.alt;
+
+    //alt is undefined
+    console.log('THIS WAS CLICKED >>>', imgClicked);
 
     for(let i = 0; i < allProductsArray.length; i++) {
         if(imgClicked === allProductsArray[i].productName) {
+            console.log('hello');
             allProductsArray[i].clicks++;
         }
     }
 
     votingRounds--;
 
-    if(votingRounds===0) {
-        productContainer.removeEventListener('click', handleProductClick);
+    if(votingRounds === 0) {
+        productContainer.removeEventListener('click', handleClick);
+        
+        renderProductChart();
     }
 
     renderImg();
 }
 
-function handleShowResults() {
-    if(votingRounds === 0) {
-        for(let i = 0; i < allProductsArray.length; i++) {
-            let li = document.createElement('li');
-            li.textContent = `${allProductsArray[i].productName} was shown ${allProductsArray[i].views} times and clicked ${allProductsArray[i].clicks} times.`;
-            resultsList.appendChild(li);
-        }
+function renderProductChart() {
+    let productNames = [];
+    let productVotes = [];
+    let productViews = [];
+
+    for(let i = 0; i < allProductsArray.length; i++) {
+        productNames.push(allProductsArray[i].productName);
+        productVotes.push(allProductsArray[i].clicks);
+        productViews.push(allProductsArray[i].views);
     }
+
+    console.log(productVotes)
+
+    let myChartObj = {
+        type: 'bar',
+        data: {
+          labels: productNames,
+          datasets: [{
+            label: '# of Votes', // # votes and # views
+            data: productVotes,
+            backgroundColor: [
+              'blue'
+            ],
+            borderColor: [
+              'blue'
+            ],
+            borderWidth: 1
+          },
+          {
+            label: '# of Views', // # votes and # views
+            data: productViews, // the actual view or votes
+            backgroundColor: [
+              'black'
+            ],
+            borderColor: [
+              'black'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      };
+
+      new Chart(ctx, myChartObj);
 }
+
 // executable code
-productContainer.addEventListener('click', handleProductClick);
-resultButton.addEventListener('click', handleShowResults);
+productContainer.addEventListener('click', handleClick);
+// resultButton.addEventListener('click', handleShowResults);
